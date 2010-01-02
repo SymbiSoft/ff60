@@ -1,0 +1,853 @@
+<!DOCTYPE HTML>
+<html i18n-values="dir:textdirection;">
+<head>
+<meta charset="utf-8">
+<title i18n-content="title"></title>
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAApZJREFUeNpEU81LVFEcPfe++z5HJ8lKK4hoE0StbB3VTukPCIoo2hst27QoWrTRktwlheKmgqIvSzEsIegDCWnboujLwTAHtfF9du7vzehjfvPum3fPued3fmfUroMne/1Kx1XX9Xq0Y6AVUIBVFLKwa/u98cx7nmUfk3j10re5u6+MX9l6J4yiriAM4XoulHLs9hJgEXlhPyWREOTIsuxwsh6Ncc9eY1y3K4hCRJU2UAWgCM5lE09KyxMFraG1RqEUcr6n2m7+uM84jhagseV5BGToP30EfUcPEUgw0Q9fvsONkUlyhCQxUCzjCmu7bjZJ6eU9S1P0EpyJihwplfQd68FqfQFxYwVpmrSMEZhpGVbk5WmWwAItgTw3142VJTgmIiIQBTm9sJehS0JgNxVJjHh9TU7NskJ6bSmJ/9XhhR1QbkgBjngkBJbI9trZEWF88LycmqabwKypYnZyXAjPXryJ+lqDihXiOFZaxstNtcW/ePD8PRb/LIuCNGVZD+RePs/MfsDvn7+QxA0Sp6JA27laEit5eGwKc5+/IKGCslrgHE8npnH52rCQ5hujtQQSmrxMH3u7MngPj5693lRB8Oj4fVwfuA3Hq8ChB0ozcIWC53lF6YHQKc7YhwnacWt0Cl+/13Du1AkMDI3gyYs38Nq2wYs6+b7KEHmcVlGOMZcWSlk2VMphpIMCj6fnMfN2HgsLNQTVLhi/CtdvhzY+YTY+iSWomCLLf9Dx3dZ1OsNAac474EkKdZrlV7vl/6Edn+RMKiNd0K8gMMsk2K537tjSr/JsKWms012bg5jmMUzSlUdgSKcCKtQy+yRJ2DtWL5w5PmFjoBii/VwcYO1hhWJG8yJgY+04TivAprmnxvr0X4ABAAUwo8Jk4Fh1AAAAAElFTkSuQmCC">
+<style>
+body {
+  background-color:white;
+  color:black;
+  margin:10px;
+}
+.header {
+  overflow:auto;
+  clear:both;
+}
+.header .logo {
+  float:left;
+}
+.header .form {
+  float:left;
+  margin-top:22px;
+  margin-left:12px;
+}
+html[dir='rtl'] .logo {
+  float:right;
+}
+html[dir='rtl'] .form {
+  float:right;
+  margin-right:12px;
+}
+#downloads-summary {
+  margin-top:12px;
+  border-top:1px solid #9cc2ef;
+  background-color:#ebeff9;
+  padding:3px;
+  margin-bottom:6px;
+}
+#downloads-summary-text {
+  font-weight:bold;
+}
+#downloads-summary > a {
+  float:right;
+}
+html[dir='rtl'] #downloads-summary > a {
+  float:left;
+}
+#downloads-display {
+  max-width:740px;
+}
+.download {
+  position:relative;
+  margin-top:6px;
+  margin-left:96px;
+  padding-left:56px;
+  margin-bottom:15px;
+}
+html[dir='rtl'] .download {
+  padding-left:0px;
+  margin-left:0px;
+  margin-right:96px;
+  padding-right:56px;
+}
+.date-container {
+  position:absolute;
+  left:-92px;
+  width:92px;
+}
+html[dir='rtl'] .date-container {
+  left:auto;
+  right:-92px;
+}
+.date-container .since {
+  color:black;
+}
+.date-container .date {
+  color:#666;
+}
+.download .icon {
+  position:absolute;
+  top:2px;
+  left:9px;
+  width:32px;
+  height:32px;
+}
+html[dir='rtl'] .icon {
+  left:auto;
+  right:9px;
+}
+.progress {
+  position:absolute;
+  top:-6px;
+  left:0px;
+  width:48px;
+  height:48px;
+}
+html[dir='rtl'] .progress {
+  left:auto;
+  right:0px;
+}
+.progress.background {
+  background:url("data:image/png;base64,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");
+}
+.progress.foreground {
+  background:url("data:image/png;base64,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");
+}
+.name {
+  display:none;
+  padding-right:16px;
+  max-width:450px;
+  word-break: break-all;
+}
+html[dir='rtl'] .name {
+  padding-right:0px;
+  padding-left:16px;
+}
+.download .status {
+  display:inline;
+  color:#999;
+  white-space:nowrap;
+}
+.download .url {
+  color:#080;
+  max-width:500px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.controls a {
+  color:#777;
+  margin-right:16px;
+}
+#downloads-pagination {
+  padding-top:24px;
+  margin-left:18px;
+}
+.page-navigation {
+  padding:8px;
+  background-color:#ebeff9;
+  margin-right:4px;
+}
+.footer {
+  height:24px;
+}
+</style>
+<script>/**
+ * The local strings get injected into the page usig a varaible named
+ * {@code templateData}. This class provides a simpler interface to access those
+ * strings.
+ * @constructor
+ */
+function LocalStrings() {
+}
+
+/**
+ * Gets a localized string by its id.
+ * @param {string} s The id of the string we want.
+ * @return {string} The localized string.
+ */
+LocalStrings.prototype.getString = function(s) {
+  return templateData[s] || '';
+};
+
+/**
+ * Returns a formatted localized string (where all %s contents are replaced
+ * by the second argument).
+ * @param {string} s The id of the string we want.
+ * @param {string} d The string to include in the formatted string.
+ * @return {string} The formatted string.
+ */
+LocalStrings.prototype.formatString = function(s, d) {
+  return this.getString(s).replace(/%s/, d);
+};
+</script>
+<script>
+
+///////////////////////////////////////////////////////////////////////////////
+// Helper functions
+function $(o) {return document.getElementById(o);}
+
+function bind(fn, selfObj, var_args) {
+  var boundArgs = Array.prototype.slice.call(arguments, 2);
+  return function() {
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift.apply(args, boundArgs);
+    return fn.apply(selfObj, args);
+  }
+}
+
+/**
+ * Sets the display style of a node.
+ */
+function showInline(node, isShow) {
+  node.style.display = isShow ? 'inline' : 'none';
+}
+
+function showInlineBlock(node, isShow) {
+  node.style.display = isShow ? 'inline-block' : 'none';
+}
+
+/**
+ * Creates an element of a specified type with a specified class name.
+ * @param {String} type The node type.
+ * @param {String} className The class name to use.
+ */
+function createElementWithClassName(type, className) {
+  var elm = document.createElement(type);
+  elm.className = className;
+  return elm;
+}
+
+/**
+ * Creates a link with a specified onclick handler and content
+ * @param {String} onclick The onclick handler
+ * @param {String} value The link text
+ */
+function createLink(onclick, value) {
+  var link = document.createElement("a");
+  link.onclick = onclick;
+  link.href = '#';
+  link.innerHTML = value;
+  return link;
+}
+
+/**
+ * Creates a button with a specified onclick handler and content
+ * @param {String} onclick The onclick handler
+ * @param {String} value The button text
+ */
+function createButton(onclick, value) {
+  var button = document.createElement("input");
+  button.type = 'button';
+  button.value = value;
+  button.onclick = onclick;
+  return button;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Downloads
+/**
+ * Class to hold all the information about the visible downloads.
+ */
+function Downloads() {
+  this.downloads_ = {};
+  this.node_ = $('downloads-display');
+  this.summary_ = $('downloads-summary-text');
+  this.searchText_ = "";
+
+  // Keep track of the dates of the newest and oldest downloads so that we
+  // know where to insert them.
+  this.newestTime_ = -1;
+}
+
+/**
+ * Called when a download has been updated or added.
+ * @param {Object} download A backend download object (see downloads_ui.cc)
+ */
+Downloads.prototype.updated = function(download) {
+  var id = download.id;
+  if (!!this.downloads_[id]) {
+    this.downloads_[id].update(download);
+  } else {
+    this.downloads_[id] = new Download(download);
+    // We get downloads in display order, so we don't have to worry about
+    // maintaining correct order - we can assume that any downloads not in
+    // display order are new ones and so we can add them to the top of the
+    // list.
+    if (download.started > this.newestTime_) {
+      this.node_.insertBefore(this.downloads_[id].node, this.node_.firstChild);
+      this.newestTime_ = download.started;
+    } else {
+      this.node_.appendChild(this.downloads_[id].node);
+    }
+    this.updateDateDisplay_();
+  }
+}
+
+/**
+ * Set our display search text.
+ * @param {String} searchText The string we're searching for.
+ */
+Downloads.prototype.setSearchText = function(searchText) {
+  this.searchText_ = searchText;
+}
+
+/**
+ * Update the summary block above the results
+ */
+Downloads.prototype.updateSummary = function() {
+  if (this.searchText_) {
+    this.summary_.textContent = localStrings.formatString(
+        'searchresultsfor', this.searchText_);
+  } else {
+    this.summary_.innerHTML = localStrings.getString('downloads');
+  }
+
+  var hasDownloads = false;
+  for (var i in this.downloads_) {
+    hasDownloads = true;
+    break;
+  }
+
+  if (!hasDownloads) {
+    this.node_.innerHTML = localStrings.getString('noresults');
+  }
+}
+
+/**
+ * Update the date visibility in our nodes so that no date is
+ * repeated.
+ */
+Downloads.prototype.updateDateDisplay_ = function() {
+  var dateContainers = document.getElementsByClassName('date-container');
+  var displayed = {};
+  for (var i = 0, container; container = dateContainers[i]; i++) {
+    var dateString = container.getElementsByClassName('date')[0].innerHTML;
+    if (!!displayed[dateString]) {
+      container.style.display = 'none';
+    } else {
+      displayed[dateString] = true;
+      container.style.display = 'block';
+    }
+  }
+}
+
+/**
+ * Remove a download.
+ * @param {Number} id The id of the download to remove.
+ */
+Downloads.prototype.remove = function(id) {
+  this.node_.removeChild(this.downloads_[id].node);
+  delete this.downloads_[id];
+  this.updateDateDisplay_();
+}
+
+/**
+ * Clear all downloads and reset us back to a null state.
+ */
+Downloads.prototype.clear = function() {
+  for (var id in this.downloads_) {
+    this.downloads_[id].clear();
+    this.remove(id);
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Download
+/**
+ * A download and the DOM representation for that download.
+ * @param {Object} download A backend download object (see downloads_ui.cc)
+ */
+function Download(download) {
+  // Create DOM
+  this.node = createElementWithClassName('div', 'download');
+
+  // Dates
+  this.dateContainer_ = createElementWithClassName('div', 'date-container');
+  this.node.appendChild(this.dateContainer_);
+
+  this.nodeSince_ = createElementWithClassName('div', 'since');
+  this.nodeDate_ = createElementWithClassName('div', 'date');
+  this.dateContainer_.appendChild(this.nodeSince_);
+  this.dateContainer_.appendChild(this.nodeDate_);
+
+  // Container for all 'safe download' UI.
+  this.safe_ = createElementWithClassName('div', 'safe');
+  this.safe_.ondragstart = bind(this.drag_, this);
+  this.node.appendChild(this.safe_);
+
+  if (download.state != Download.States.COMPLETE) {
+    this.nodeProgressBackground_ =
+        createElementWithClassName('div', 'progress background');
+    this.safe_.appendChild(this.nodeProgressBackground_);
+
+    this.canvasProgress_ =
+        document.getCSSCanvasContext('2d', 'canvas_' + download.id,
+            Download.Progress.width,
+            Download.Progress.height);
+
+    this.nodeProgressForeground_ =
+        createElementWithClassName('div', 'progress foreground');
+    this.nodeProgressForeground_.style.webkitMask =
+        '-webkit-canvas(canvas_'+download.id+')';
+    this.safe_.appendChild(this.nodeProgressForeground_);
+  }
+
+  this.nodeImg_ = createElementWithClassName('img', 'icon');
+  this.safe_.appendChild(this.nodeImg_);
+
+  // FileLink is used for completed downloads, otherwise we show FileName.
+  this.nodeTitleArea_ = createElementWithClassName('div', 'title-area');
+  this.safe_.appendChild(this.nodeTitleArea_);
+
+  this.nodeFileLink_ = createLink(bind(this.openFile_, this), '');
+  this.nodeFileLink_.className = 'name';
+  this.nodeFileLink_.style.display = 'none';
+  this.nodeTitleArea_.appendChild(this.nodeFileLink_);
+
+  this.nodeFileName_ = createElementWithClassName('span', 'name');
+  this.nodeFileName_.style.display = 'none';
+  this.nodeTitleArea_.appendChild(this.nodeFileName_);
+
+  this.nodeStatus_ = createElementWithClassName('span', 'status');
+  this.nodeTitleArea_.appendChild(this.nodeStatus_);
+
+  this.nodeURL_ = createElementWithClassName('div', 'url');
+  this.safe_.appendChild(this.nodeURL_);
+
+  // Controls.
+  this.nodeControls_ = createElementWithClassName('div', 'controls');
+  this.safe_.appendChild(this.nodeControls_);
+
+  this.controlShow_ = createLink(bind(this.show_, this),
+      localStrings.getString('control_showinfolder'));
+  this.nodeControls_.appendChild(this.controlShow_);
+
+  // Pause/Resume are a toggle.
+  this.controlPause_ = createLink(bind(this.togglePause_, this),
+      localStrings.getString('control_pause'));
+  this.nodeControls_.appendChild(this.controlPause_);
+
+  this.controlResume_ = createLink(bind(this.togglePause_, this),
+      localStrings.getString('control_resume'));
+  this.nodeControls_.appendChild(this.controlResume_);
+
+  this.controlRemove_ = createLink(bind(this.remove_, this),
+      localStrings.getString('control_removefromlist'));
+  this.nodeControls_.appendChild(this.controlRemove_);
+
+  this.controlCancel_ = createLink(bind(this.cancel_, this),
+      localStrings.getString('control_cancel'));
+  this.nodeControls_.appendChild(this.controlCancel_);
+
+  // Container for 'unsafe download' UI.
+  this.danger_ = createElementWithClassName('div', 'show-dangerous');
+  this.node.appendChild(this.danger_);
+
+  this.dangerDesc_ = document.createElement("div");
+  this.danger_.appendChild(this.dangerDesc_);
+
+  this.dangerSave_ = createButton(bind(this.saveDangerous_, this),
+      localStrings.getString("danger_save"));
+  this.danger_.appendChild(this.dangerSave_);
+
+  this.dangerDiscard_ = createButton(bind(this.discardDangerous_, this),
+      localStrings.getString("danger_discard"));
+  this.danger_.appendChild(this.dangerDiscard_);
+
+  // Update member vars.
+  this.update(download);
+}
+
+/**
+ * The states a download can be in. These correspond to states defined in
+ * DownloadsDOMHandler::CreateDownloadItemValue
+ */
+Download.States = {
+  IN_PROGRESS : "IN_PROGRESS",
+  CANCELLED : "CANCELLED",
+  COMPLETE : "COMPLETE",
+  PAUSED : "PAUSED",
+  DANGEROUS : "DANGEROUS",
+}
+
+/**
+ * Constants for the progress meter.
+ */
+Download.Progress = {
+  width : 48,
+  height : 48,
+  radius : 24,
+  centerX : 24,
+  centerY : 24,
+  base : -0.5 * Math.PI,
+  dir : false,
+}
+
+/**
+ * Updates the download to reflect new data.
+ * @param {Object} download A backend download object (see downloads_ui.cc)
+ */
+Download.prototype.update = function(download) {
+  this.id_ = download.id;
+  this.filePath_ = download.file_path;
+  this.fileName_ = download.file_name;
+  this.url_ = download.url;
+  this.state_ = download.state;
+
+  this.since_ = download.since_string;
+  this.date_ = download.date_string;
+
+  // See DownloadItem::PercentComplete
+  this.percent_ = Math.max(download.percent, 0);
+  this.progressStatusText_ = download.progress_status_text;
+  this.received_ = download.received;
+
+  if (this.state_ == Download.States.DANGEROUS) {
+    this.dangerDesc_.innerHTML = localStrings.formatString('danger_desc',
+                                                           this.fileName_);
+    this.danger_.style.display = 'block';
+    this.safe_.style.display = 'none';
+  } else {
+    this.nodeImg_.src = 'chrome://fileicon/' + this.filePath_;
+
+    if (this.state_ == Download.States.COMPLETE) {
+      this.nodeFileLink_.innerHTML = this.fileName_;
+      this.nodeFileLink_.href = this.filePath_;
+    } else {
+      this.nodeFileName_.innerHTML = this.fileName_;
+    }
+
+    showInline(this.nodeFileLink_, this.state_ == Download.States.COMPLETE);
+    // nodeFileName_ has to be inline-block to avoid the 'interaction' with
+    // nodeStatus_. If both are inline, it appears that their text contents
+    // are merged before the bidi algorithm is applied leading to an
+    // undesirable reordering. http://crbug.com/13216
+    showInlineBlock(this.nodeFileName_, this.state_ != Download.States.COMPLETE);
+
+    if (this.state_ == Download.States.IN_PROGRESS) {
+      this.nodeProgressForeground_.style.display = 'block';
+      this.nodeProgressBackground_.style.display = 'block';
+
+      // Draw a pie-slice for the progress.
+      this.canvasProgress_.clearRect(0, 0,
+                                     Download.Progress.width,
+                                     Download.Progress.height);
+      this.canvasProgress_.beginPath();
+      this.canvasProgress_.moveTo(Download.Progress.centerX,
+                                  Download.Progress.centerY);
+
+      // Draw an arc CW for both RTL and LTR. http://crbug.com/13215
+      this.canvasProgress_.arc(Download.Progress.centerX,
+                               Download.Progress.centerY,
+                               Download.Progress.radius,
+                               Download.Progress.base,
+                               Download.Progress.base + Math.PI * 0.02 *
+                               Number(this.percent_),
+                               false);
+
+      this.canvasProgress_.lineTo(Download.Progress.centerX,
+                                  Download.Progress.centerY);
+      this.canvasProgress_.fill();
+      this.canvasProgress_.closePath();
+    } else if (this.nodeProgressBackground_) {
+      this.nodeProgressForeground_.style.display = 'none';
+      this.nodeProgressBackground_.style.display = 'none';
+    }
+
+    showInline(this.controlShow_, this.state_ == Download.States.COMPLETE);
+    showInline(this.controlPause_, this.state_ == Download.States.IN_PROGRESS);
+    showInline(this.controlResume_, this.state_ == Download.States.PAUSED);
+    showInline(this.controlCancel_, this.state_ == Download.States.IN_PROGRESS ||
+                                    this.state_ == Download.States.PAUSED);
+
+    this.nodeSince_.innerHTML = this.since_;
+    this.nodeDate_.innerHTML = this.date_;
+    this.nodeURL_.innerHTML = this.url_;
+    this.nodeStatus_.innerHTML = this.getStatusText_();
+
+    this.danger_.style.display = 'none';
+    this.safe_.style.display = 'block';
+  }
+}
+
+/**
+ * Removes applicable bits from the DOM in preparation for deletion.
+ */
+Download.prototype.clear = function() {
+  this.safe_.ondragstart = null;
+  this.nodeFileLink_.onclick = null;
+  this.controlShow_.onclick = null;
+  this.controlCancel_.onclick = null;
+  this.controlPause_.onclick = null;
+  this.controlResume_.onclick = null;
+  this.dangerDiscard_.onclick = null;
+
+  this.node.innerHTML = '';
+}
+
+/**
+ * @return {String} User-visible status update text.
+ */
+Download.prototype.getStatusText_ = function() {
+  switch (this.state_) {
+    case Download.States.IN_PROGRESS:
+      return this.progressStatusText_;
+    case Download.States.CANCELLED:
+      return localStrings.getString('status_cancelled');
+    case Download.States.PAUSED:
+      return localStrings.getString('status_paused');
+    case Download.States.DANGEROUS:
+      return localStrings.getString('danger_desc');
+    case Download.States.COMPLETE:
+      return "";
+  }
+}
+
+/**
+ * Tells the backend to initiate a drag, allowing users to drag
+ * files from the download page and have them appear as native file
+ * drags.
+ */
+Download.prototype.drag_ = function() {
+  chrome.send("drag", [this.id_.toString()]);
+  return false;
+}
+
+/**
+ * Tells the backend to open this file.
+ */
+Download.prototype.openFile_ = function() {
+  chrome.send("openFile", [this.id_.toString()]);
+  return false;
+}
+
+/**
+ * Tells the backend that the user chose to save a dangerous file.
+ */
+Download.prototype.saveDangerous_ = function() {
+  chrome.send("saveDangerous", [this.id_.toString()]);
+  return false;
+}
+
+/**
+ * Tells the backend that the user chose to discard a dangerous file.
+ */
+Download.prototype.discardDangerous_ = function() {
+  chrome.send("discardDangerous", [this.id_.toString()]);
+  downloads.remove(this.id_);
+  return false;
+}
+
+/**
+ * Tells the backend to show the file in explorer.
+ */
+Download.prototype.show_ = function() {
+  chrome.send("show", [this.id_.toString()]);
+  return false;
+}
+
+/**
+ * Tells the backend to pause this download.
+ */
+Download.prototype.togglePause_ = function() {
+  chrome.send("togglepause", [this.id_.toString()]);
+  return false;
+}
+
+/**
+ * Tells the backend to remove this download from history and download shelf.
+ */
+ Download.prototype.remove_ = function() {
+  chrome.send("remove", [this.id_.toString()]);
+  return false;
+}
+
+/**
+ * Tells the backend to cancel this download.
+ */
+Download.prototype.cancel_ = function() {
+  chrome.send("cancel", [this.id_.toString()]);
+  return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Page:
+var downloads, localStrings, resultsTimeout;
+
+function load() {
+  localStrings = new LocalStrings();
+  downloads = new Downloads();
+  $('term').focus();
+  setSearch("");
+}
+
+function setSearch(searchText) {
+  downloads.clear();
+  downloads.setSearchText(searchText);
+  chrome.send("getDownloads", [searchText.toString()]);
+}
+
+function clearAll() {
+  downloads.clear();
+  downloads.setSearchText('');
+  chrome.send('clearAll', []);
+  return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Chrome callbacks:
+/**
+ * Our history system calls this function with results from searches or when
+ * downloads are added or removed.
+ */
+function downloadsList(results) {
+  if (resultsTimeout)
+    clearTimeout(resultsTimeout);
+  window.console.log('results');
+  downloads.clear();
+  downloadUpdated(results);
+  downloads.updateSummary();
+}
+
+/**
+ * When a download is updated (progress, state change), this is called.
+ */
+function downloadUpdated(results) {
+  // Sometimes this can get called too early.
+  if (!downloads)
+    return;
+
+  var start = Date.now();
+  for (var i = 0; i < results.length; i++) {
+    downloads.updated(results[i]);
+    // Do as much as we can in 50ms.
+    if (Date.now() - start > 50) {
+      clearTimeout(resultsTimeout);
+      resultsTimeout = setTimeout(downloadUpdated, 5, results.slice(i + 1));
+      break;
+    }
+  }
+}
+
+</script>
+</head>
+<body onload="load();" i18n-values=".style.fontFamily:fontfamily;.style.fontSize:fontsize">
+<div class="header">
+  <a href="" onclick="setSearch(''); return false;">
+    <img src="data:image/png;base64,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"
+         width="67" height="67" class="logo" border="0" /></a>
+  <form method="post" action=""
+      onsubmit="setSearch(this.term.value); return false;"
+      class="form">
+    <input type="text" name="term" id="term" />
+    <input type="submit" name="submit" i18n-values="value:searchbutton" />
+  </form>
+</div>
+<div class="main">
+  <div id="downloads-summary">
+    <span id="downloads-summary-text" i18n-content="downloads">Downloads</span>
+    <a id="clear-all" href="" onclick="clearAll();" i18n-content="clear_all">Clear All</a>
+  </div>
+  <div id="downloads-display"></div>
+</div>
+<div class="footer">
+</div>
+</body>
+</html>
+<script>var templateData = {"clear_all":"\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0432\u0441\u0435","control_cancel":"\u041E\u0442\u043C\u0435\u043D\u0430","control_pause":"\u041F\u0430\u0443\u0437\u0430","control_removefromlist":"\u0423\u0434\u0430\u043B\u0438\u0442\u044C \u0438\u0437 \u0441\u043F\u0438\u0441\u043A\u0430","control_resume":"\u0412\u043E\u0437\u043E\u0431\u043D\u043E\u0432\u0438\u0442\u044C","control_showinfolder":"\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u044C \u0432 \u043F\u0430\u043F\u043A\u0435","danger_desc":"\u0424\u0430\u0439\u043B \u0434\u0430\u043D\u043D\u043E\u0433\u043E \u0442\u0438\u043F\u0430 \u043C\u043E\u0436\u0435\u0442 \u043D\u0430\u043D\u0435\u0441\u0442\u0438 \u0432\u0440\u0435\u0434 \u0432\u0430\u0448\u0435\u043C\u0443 \u043A\u043E\u043C\u043F\u044C\u044E\u0442\u0435\u0440\u0443. \u0412\u044B \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0442\u0435\u043B\u044C\u043D\u043E \u0445\u043E\u0442\u0438\u0442\u0435 \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C %s?","danger_discard":"\u041E\u0442\u043C\u0435\u043D\u0438\u0442\u044C \u043F\u0435\u0440\u0435\u0434\u0430\u0447\u0443","danger_save":"\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C","downloads":"\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0438","fontfamily":"Arial","fontsize":"84%","no_results":"\u041F\u043E\u0438\u0441\u043A \u0432 \u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0430\u0445","searchbutton":"\u041F\u043E\u0438\u0441\u043A \u0432 \u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0430\u0445","searchresultsfor":"\u0420\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u044B \u043F\u043E\u0438\u0441\u043A\u0430 \u043F\u043E \u0437\u0430\u043F\u0440\u043E\u0441\u0443 \"%s\"","status_cancelled":"\u041E\u0442\u043C\u0435\u043D\u0435\u043D\u043E","status_paused":"\u041F\u0440\u0438\u043E\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D","textdirection":"ltr","title":"\u0417\u0430\u0433\u0440\u0443\u0437\u043A\u0438"};</script><script>/**
+ * @fileoverview This is a simple template engine inspired by JsTemplates
+ * optimized for i18n.
+ *
+ * It currently supports two handlers:
+ *
+ *   * i18n-content which sets the textContent of the element
+ *
+ *     <span i18n-content="myContent"></span>
+ *     i18nTemplate.process(element, {'myContent': 'Content'});
+ *
+ *   * i18n-values is a list of attribute-value or property-value pairs.
+ *     Properties are prefixed with a '.' and can contain nested properties.
+ *
+ *     <span i18n-values="title:myTitle;.style.fontSize:fontSize"></span>
+ *     i18nTemplate.process(element, {
+ *       'myTitle': 'Title',
+ *       'fontSize': '13px'
+ *     });
+ */
+
+var i18nTemplate = (function() {
+  /**
+   * This provides the handlers for the templating engine. The key is used as
+   * the attribute name and the value is the function that gets called for every
+   * single node that has this attribute.
+   * @type {Object}
+   */
+  var handlers = {
+    /**
+     * This handler sets the textContent of the element.
+     */
+    'i18n-content': function(element, attributeValue, obj) {
+      element.textContent = obj[attributeValue];
+    },
+
+    /**
+     * This is used to set HTML attributes and DOM properties,. The syntax is:
+     *   attributename:key;
+     *   .domProperty:key;
+     *   .nested.dom.property:key
+     */
+    'i18n-values': function(element, attributeValue, obj) {
+      var parts = attributeValue.replace(/\s/g, '').split(/;/);
+      for (var j = 0; j < parts.length; j++) {
+        var a = parts[j].match(/^([^:]+):(.+)$/);
+        if (a) {
+          var propName = a[1];
+          var propExpr = a[2];
+
+          // Ignore missing properties
+          if (propExpr in obj) {
+            var value = obj[propExpr];
+            if (propName.charAt(0) == '.') {
+              var path = propName.slice(1).split('.');
+              var object = element;
+              while (object && path.length > 1) {
+                object = object[path.shift()];
+              }
+              if (object) {
+                object[path] = value;
+                // In case we set innerHTML (ignoring others) we need to
+                // recursively check the content
+                if (path == 'innerHTML') {
+                  process(element, obj);
+                }
+              }
+            } else {
+              element.setAttribute(propName, value);
+            }
+          } else {
+            console.warn('i18n-values: Missing value for "' + propExpr + '"');
+          }
+        }
+      }
+    }
+  };
+
+  var attributeNames = [];
+  for (var key in handlers) {
+    attributeNames.push(key);
+  }
+  var selector = '[' + attributeNames.join('],[') + ']';
+
+  /**
+   * Processes a DOM tree with the {@code obj} map.
+   */
+  function process(node, obj) {
+    var elements = node.querySelectorAll(selector);
+    for (var element, i = 0; element = elements[i]; i++) {
+      for (var j = 0; j < attributeNames.length; j++) {
+        var name = attributeNames[j];
+        var att = element.getAttribute(name);
+        if (att != null) {
+          handlers[name](element, att, obj);
+        }
+      }
+    }
+  }
+
+  return {
+    process: process
+  };
+})();
+</script><script>i18nTemplate.process(document, templateData);</script>
