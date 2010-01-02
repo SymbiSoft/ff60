@@ -1,1 +1,10 @@
-/home/ilvar/job/ff60/build/ff60.pkg
+#{"ff60"},(0xeed4e242),0,1,0,TYPE=SISAPP
+
+;Localised Vendor name
+%{"ilvar.ru"}
+
+; Unique Vendor name
+:"ilvar.ru"
+
+@"PythonScriptShell_1.9.6_3_0", (0x20022EE9)
+@"Python_1.9.7.sis", (0x20022EE8)
