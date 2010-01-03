@@ -10,6 +10,8 @@ import appuifw
 
 appuifw.app.directional_pad = False
 appuifw.app.body = appuifw.Text(u'Please update your feed')
+appuifw.app.title = u'ff60'
+appuifw.app.screen = 'normal'
 
 import sys
 import e32
@@ -87,20 +89,27 @@ class Main:
         self.view_feed(update=True)
 
     def show_post(self):
-        appuifw.app.body = appuifw.Text(self.data['entries'][self.lb.current()]['rawBody'])
+        entry = self.data['entries'][self.lb.current()]
+        post_text = appuifw.Text(entry['rawBody'])
+        post_text.color = 0x000066
+
+        # self.links = [entry['url']]
+        self.links = []
+        self.links += re.findall(u'[^>](https?://[^"<>\s]+)', entry['body'] + u' ' + entry['rawBody'], re.I)
+        self.links += [t['link'] for t in entry.get('thumbnails', [])]
+        self.links = list(set(self.links))
+
+        post_text.add(u'\n\nLinks:\n' + u'\n'.join(self.links))
+        appuifw.app.body = post_text
         appuifw.app.menu = [
             (u'Browse post', self.open_url),
-            (u'Browse all links', self.show_links),
+            (u'Browse links', self.show_links),
             (u'View feed', self.view_feed),
         ]
         appuifw.app.exit_key_handler = self.view_feed
 
     def show_links(self):
         entry = self.data['entries'][self.lb.current()]
-        self.links = [entry['url']]
-        self.links += re.findall(u'[^>](https?://[^"<>\s]+)', entry['body'] + u' ' + entry['rawBody'], re.I)
-        self.links += [t.link for t in entry.get('thumbnails', [])]
-        self.links = list(set(self.links))
         self.links_list.set_list(self.links)
         appuifw.app.body = self.links_list
         appuifw.app.menu = [
