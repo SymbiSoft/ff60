@@ -1,3 +1,4 @@
 ^debug.txt$
 ^\..*\.sis$
 ^build/
+.*\.pyc$

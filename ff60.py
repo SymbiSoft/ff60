@@ -16,6 +16,7 @@ import e32
 import e32dbm
 
 import friendfeed
+import re
 
 SYMBIAN_UID = 0xeed4e242
 SIS_VERSION = "0.1"
@@ -30,6 +31,7 @@ class Main:
         self.db = e32dbm.open(u'c:\\ff60.db', 'c')
         self.data = None
         self.lb = None
+        self.links_list = appuifw.Listbox([u'Links list'], self.open_link)
         self.page = 0
         self.ff = None
         self.waiter = appuifw.Text(u'Please wait...')
@@ -87,14 +89,33 @@ class Main:
     def show_post(self):
         appuifw.app.body = appuifw.Text(self.data['entries'][self.lb.current()]['rawBody'])
         appuifw.app.menu = [
-            (u'Open in browser', self.open_url),
+            (u'Browse post', self.open_url),
+            (u'Browse all links', self.show_links),
             (u'View feed', self.view_feed),
         ]
         appuifw.app.exit_key_handler = self.view_feed
 
+    def show_links(self):
+        entry = self.data['entries'][self.lb.current()]
+        self.links = [entry['url']]
+        self.links += re.findall(u'[^>](https?://[^"<>\s]+)', entry['body'] + u' ' + entry['rawBody'], re.I)
+        self.links += [t.link for t in entry.get('thumbnails', [])]
+        self.links = list(set(self.links))
+        self.links_list.set_list(self.links)
+        appuifw.app.body = self.links_list
+        appuifw.app.menu = [
+            (u'Open', self.open_link),
+        ]
+        appuifw.app.exit_key_handler = self.show_post
+
     def open_url(self):
         browserApp ='BrowserNG.exe'
         url = self.data['entries'][self.lb.current()]['url']
+        e32.start_exe(browserApp, ' "4 %s"' % url, 1)
+
+    def open_link(self):
+        browserApp ='BrowserNG.exe'
+        url = self.links[self.links_list.current()]
         e32.start_exe(browserApp, ' "4 %s"' % url, 1)
 
 # создаем объект lock, который нужен, чтоб ваше приложение не закрылось сразу после открытия

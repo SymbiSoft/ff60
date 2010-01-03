@@ -21,5 +21,5 @@ data = ff.fetch_feed("home")
 items = []
 for e in data['entries']:
     items.append((e['from']['name'], e['body'][:25] + u'...'))
-print items
+print data['entries'][0]
 
