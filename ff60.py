@@ -20,8 +20,7 @@ import e32dbm
 import friendfeed
 import re
 
-SYMBIAN_UID = 0xeed4e242
-SIS_VERSION = "0.1"
+SIS_VERSION = "0.2"
 
 oauth_consumer_key = u'039f2ee0fea942be9ca9ccdd3455a98c'
 oauth_consumer_secret = u'6cdfe18c375644d4a5619aa5b42c81d85cb4116dd4a84a948f274059ff096ea0'
@@ -36,11 +35,25 @@ class Main:
         self.links_list = appuifw.Listbox([u'Links list'], self.open_link)
         self.page = 0
         self.ff = None
+        self.feed_list = []
+        self.locale = self.db and  self.db.get('locale', 'en') or 'en'
         self.waiter = appuifw.Text(u'Please wait...')
         appuifw.app.menu = [
             (u'Update feed', self.view_feed),
             (u'Change password', self.ask_passwd),
+            (u'Change locale', self.change_locale),
         ]
+
+    def change_locale(self):
+        languages = {
+            u'English': 'en', 
+            u'Русский': 'ru',
+        }
+        keys = languages.keys()
+        idx = appuifw.selection_list(keys)
+        self.locale = languages[keys[idx]]
+        self.db['locale'] = self.locale
+        self.ff = None
 
     def ask_passwd(self):
         user, passwd = appuifw.multi_query(u'username', u'password')
@@ -56,7 +69,9 @@ class Main:
             consumer_token = dict(key=oauth_consumer_key, secret=oauth_consumer_secret)
             access_token = friendfeed.fetch_installed_app_access_token(consumer_token, user, passwd)
             self.ff = friendfeed.FriendFeed(consumer_token, access_token)
-        self.data = self.ff.fetch_feed("home", num=ff_num_per_page, start=ff_num_per_page*self.page, maxcomments=0, maxlikes=0, raw=1)
+            self.feed_list = self.ff.fetch_feed_list(locale=self.locale)
+            self.feed_info = self.ff.fetch_feed_info('me', locale=self.locale)
+        self.data = self.ff.fetch_feed("home", num=ff_num_per_page, start=ff_num_per_page*self.page, maxcomments=0, maxlikes=0, raw=1, locale=self.locale)
 
     def view_feed(self, update=False):
         if update or not self.data:
@@ -70,8 +85,10 @@ class Main:
             else:
                 self.lb.set_list(items)
 
+        appuifw.app.title = u'ff60 - view feed'
         appuifw.app.body = self.lb
         app_menu = [
+            (u'New post', self.new_post),
             (u'Next page', self.next_page),
         ]
         if self.page > 0:
@@ -88,6 +105,29 @@ class Main:
         self.page += 1
         self.view_feed(update=True)
 
+    def new_post(self):
+        post_text = appuifw.Text(u'')
+        appuifw.app.title = u'ff60 - new post'
+        appuifw.app.body = post_text
+        appuifw.app.menu = [
+            (u'Send', self.send_post),
+        ]
+        appuifw.app.exit_key_handler = self.view_feed
+
+    def send_post(self):
+        feed_dict = {'me': u'My feed'}
+        feed_dict.update(dict(map(lambda s: (s['id'], s['name']), filter(lambda s: s['type'] == u'group', self.feed_info['subscriptions']))))
+        post_to_ids = appuifw.multi_selection_list(feed_dict.values(), 'checkbox', 1)
+        post_to = map(lambda id: feed_dict.keys()[id], post_to_ids)
+        body = appuifw.app.body.get()
+        if body and post_to:
+            appuifw.note('Posting %s to %s ...' % (body, u', '.join(post_to)))
+            self.ff.post_entry(body, to=u','.join(post_to))
+            appuifw.note('ok! now updating your feed...')
+            self.view_feed(update=True)
+        else:
+            self.view_feed(update=False)
+
     def show_post(self):
         entry = self.data['entries'][self.lb.current()]
         post_text = appuifw.Text(entry['rawBody'])
@@ -99,6 +139,7 @@ class Main:
         self.links += [t['link'] for t in entry.get('thumbnails', [])]
         self.links = list(set(self.links))
 
+        appuifw.app.title = u'ff60 - view post'
         post_text.add(u'\n\nLinks:\n' + u'\n'.join(self.links))
         appuifw.app.body = post_text
         appuifw.app.menu = [

@@ -304,6 +304,7 @@ class FriendFeed(object):
             args.update(oauth)
 
         if args: url += "?" + urllib.urlencode(args)
+        print url, args, post_args
         if post_args is not None:
             request = urllib2.Request(url, urllib.urlencode(post_args))
         else:
@@ -311,6 +312,7 @@ class FriendFeed(object):
         stream = urllib2.urlopen(request)
         data = stream.read()
         stream.close()
+        print data
         return self._parse_dates(_parse_json(data))
 
     def _parse_dates(self, obj):
